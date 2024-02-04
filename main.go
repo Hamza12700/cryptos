@@ -68,6 +68,6 @@ func main() {
 	http.HandleFunc("/md5sum", corsMiddleWare(md5sum))
 	http.HandleFunc("/sha1sum", corsMiddleWare(sha1Sum))
 	http.HandleFunc("/sha256sum", corsMiddleWare(sha256Sum))
-	fmt.Printf("Listening on %s", port)
+	fmt.Println("Listening on", port)
 	http.ListenAndServe(port, nil)
 }
