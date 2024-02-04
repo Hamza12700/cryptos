@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+const port string = ":2323"
 
 func corsMiddleWare(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -35,3 +36,8 @@ func md5sum(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonResq)
 }
 
+func main() {
+	http.HandleFunc("/md5sum", corsMiddleWare(md5sum))
+	fmt.Printf("Listening on %s", port)
+	http.ListenAndServe(port, nil)
+}
