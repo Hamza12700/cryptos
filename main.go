@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/md5"
+	"crypto/sha1"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
@@ -18,6 +19,20 @@ func corsMiddleWare(next http.HandlerFunc) http.HandlerFunc {
 
 		next(w, r)
 	}
+}
+
+func sha1Sum(w http.ResponseWriter, r *http.Request) {
+	textToHash := r.URL.Query().Get("text")
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	hashedText := sha1.Sum([]byte(textToHash))
+	sha1Hash := hex.EncodeToString(hashedText[:])
+	jsonResq, err := json.Marshal(sha1Hash)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	w.Write(jsonResq)
 }
 
 func md5sum(w http.ResponseWriter, r *http.Request) {
@@ -38,6 +53,7 @@ func md5sum(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/md5sum", corsMiddleWare(md5sum))
+	http.HandleFunc("/sha1sum", corsMiddleWare(sha1Sum))
 	fmt.Printf("Listening on %s", port)
 	http.ListenAndServe(port, nil)
 }
