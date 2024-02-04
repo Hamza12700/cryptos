@@ -19,3 +19,19 @@ func corsMiddleWare(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
+func md5sum(w http.ResponseWriter, r *http.Request) {
+	textToHash := r.URL.Query().Get("text")
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	hashedText := md5.Sum([]byte(textToHash))
+	md5Hashed := hex.EncodeToString(hashedText[:])
+	resq := make(map[string]string)
+	resq["md5sum"] = md5Hashed
+	jsonResq, err := json.Marshal(resq)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	w.Write(jsonResq)
+}
+
