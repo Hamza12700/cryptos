@@ -8,9 +8,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 )
-
-const port string = ":2323"
 
 func hasher(w http.ResponseWriter, hashedText []byte) {
 	w.Header().Set("Content-Type", "application/json")
@@ -53,6 +52,10 @@ func main() {
 	http.HandleFunc("/sha1", sha1Sum)
 	http.HandleFunc("/sha256", sha256Sum)
 	http.HandleFunc("/sha224", sha224Sum)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "2323"
+	}
 	fmt.Println("Listening on", port)
 	http.ListenAndServe(port, nil)
 }
