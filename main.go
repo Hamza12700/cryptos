@@ -27,19 +27,19 @@ func hasher(w http.ResponseWriter, hashedText []byte) {
 func sha1Sum(w http.ResponseWriter, r *http.Request) {
 	textToHash := r.URL.Query().Get("text")
 	hashedText := sha1.Sum([]byte(textToHash))
-	hasher(w,hashedText[:])
+	hasher(w, hashedText[:])
 }
 
 func sha256Sum(w http.ResponseWriter, r *http.Request) {
 	textToHash := r.URL.Query().Get("text")
 	hashedText := sha256.Sum256([]byte(textToHash))
-	hasher(w,hashedText[:])
+	hasher(w, hashedText[:])
 }
 
 func md5sum(w http.ResponseWriter, r *http.Request) {
 	textToHash := r.URL.Query().Get("text")
 	hashedText := md5.Sum([]byte(textToHash))
-	hasher(w,hashedText[:])
+	hasher(w, hashedText[:])
 }
 
 func main() {
