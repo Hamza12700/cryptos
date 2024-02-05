@@ -36,6 +36,12 @@ func sha256Sum(w http.ResponseWriter, r *http.Request) {
 	hasher(w, hashedText[:])
 }
 
+func sha224Sum(w http.ResponseWriter, r *http.Request) {
+	textToHash := r.URL.Query().Get("text")	
+	hashedText := sha256.Sum224([]byte(textToHash))
+	hasher(w,hashedText[:])
+}
+
 func md5sum(w http.ResponseWriter, r *http.Request) {
 	textToHash := r.URL.Query().Get("text")
 	hashedText := md5.Sum([]byte(textToHash))
@@ -46,6 +52,7 @@ func main() {
 	http.HandleFunc("/md5", md5sum)
 	http.HandleFunc("/sha1", sha1Sum)
 	http.HandleFunc("/sha256", sha256Sum)
+	http.HandleFunc("/sha224", sha224Sum)
 	fmt.Println("Listening on", port)
 	http.ListenAndServe(port, nil)
 }
