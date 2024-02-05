@@ -12,16 +12,6 @@ import (
 
 const port string = ":2323"
 
-func corsMiddleWare(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-
-		next(w, r)
-	}
-}
-
 func sha1Sum(w http.ResponseWriter, r *http.Request) {
 	textToHash := r.URL.Query().Get("text")
 	w.Header().Set("Content-Type", "application/json")
@@ -65,9 +55,9 @@ func md5sum(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/md5", corsMiddleWare(md5sum))
-	http.HandleFunc("/sha1", corsMiddleWare(sha1Sum))
-	http.HandleFunc("/sha256", corsMiddleWare(sha256Sum))
+	http.HandleFunc("/md5", md5sum)
+	http.HandleFunc("/sha1", sha1Sum)
+	http.HandleFunc("/sha256", sha256Sum)
 	fmt.Println("Listening on", port)
 	http.ListenAndServe(port, nil)
 }
