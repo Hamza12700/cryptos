@@ -57,5 +57,5 @@ func main() {
 		port = "2323"
 	}
 	fmt.Println("Listening on", port)
-	http.ListenAndServe(port, nil)
+	http.ListenAndServe(":"+port, nil)
 }
