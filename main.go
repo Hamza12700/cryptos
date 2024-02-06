@@ -58,12 +58,23 @@ func uriEncodor(w http.ResponseWriter, r *http.Request) {
 	middleware(w, encodedURI)
 }
 
+func uriDecodor(w http.ResponseWriter, r *http.Request) {
+	textToDecode := r.URL.Query().Get("text")
+	decodedURI, err := url.PathUnescape(textToDecode)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	middleware(w, decodedURI)
+}
+
 func main() {
 	http.HandleFunc("/md5", md5sum)
 	http.HandleFunc("/sha1", sha1Sum)
 	http.HandleFunc("/sha256", sha256Sum)
 	http.HandleFunc("/sha224", sha224Sum)
 	http.HandleFunc("/uri-encode", uriEncodor)
+	http.HandleFunc("/uri-decode", uriDecodor)
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "2323"
