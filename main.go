@@ -13,6 +13,7 @@ import (
 
 func hasher(w http.ResponseWriter, hashedText []byte) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusCreated)
 	hash := hex.EncodeToString(hashedText[:])
 	jsonResq, err := json.Marshal(hash)
