@@ -22,29 +22,33 @@ func middleware(w http.ResponseWriter, sendResquest string) {
 	}
 	w.Write(jsonResq)
 }
+func hexToString(w http.ResponseWriter, hashedText []byte) {
+	hash := hex.EncodeToString(hashedText[:])
+	middleware(w, hash)
+}
 
 func sha1Sum(w http.ResponseWriter, r *http.Request) {
 	textToHash := r.URL.Query().Get("text")
 	hashedText := sha1.Sum([]byte(textToHash))
-	hasher(w, hashedText[:])
+	hexToString(w, hashedText[:])
 }
 
 func sha256Sum(w http.ResponseWriter, r *http.Request) {
 	textToHash := r.URL.Query().Get("text")
 	hashedText := sha256.Sum256([]byte(textToHash))
-	hasher(w, hashedText[:])
+	hexToString(w, hashedText[:])
 }
 
 func sha224Sum(w http.ResponseWriter, r *http.Request) {
 	textToHash := r.URL.Query().Get("text")	
 	hashedText := sha256.Sum224([]byte(textToHash))
-	hasher(w,hashedText[:])
+	hexToString(w,hashedText[:])
 }
 
 func md5sum(w http.ResponseWriter, r *http.Request) {
 	textToHash := r.URL.Query().Get("text")
 	hashedText := md5.Sum([]byte(textToHash))
-	hasher(w, hashedText[:])
+	hexToString(w, hashedText[:])
 }
 
 func main() {
