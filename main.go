@@ -52,7 +52,7 @@ func md5sum(w http.ResponseWriter, r *http.Request) {
 	hexToString(w, hashedText[:])
 }
 
-func uriEncoder(w http.ResponseWriter, r *http.Request) {
+func uriEncodor(w http.ResponseWriter, r *http.Request) {
 	textToEncode := r.URL.Query().Get("text")
 	encodedURI := url.PathEscape(textToEncode)
 	middleware(w, encodedURI)
@@ -63,7 +63,7 @@ func main() {
 	http.HandleFunc("/sha1", sha1Sum)
 	http.HandleFunc("/sha256", sha256Sum)
 	http.HandleFunc("/sha224", sha224Sum)
-	http.HandleFunc("/uri-encode", uriEncoder)
+	http.HandleFunc("/uri-encode", uriEncodor)
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "2323"
