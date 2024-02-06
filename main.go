@@ -11,12 +11,11 @@ import (
 	"os"
 )
 
-func hasher(w http.ResponseWriter, hashedText []byte) {
+func middleware(w http.ResponseWriter, sendResquest string) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusCreated)
-	hash := hex.EncodeToString(hashedText[:])
-	jsonResq, err := json.Marshal(hash)
+	jsonResq, err := json.Marshal(sendResquest)
 	if err != nil {
 		fmt.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
