@@ -87,6 +87,14 @@ func generateUUID(w http.ResponseWriter, r *http.Request) {
 	middleware(w, uuidBytes.String())
 }
 
+func randomUUID(w http.ResponseWriter, r *http.Request) {
+	randomlyGenUUID, err := uuid.NewRandom()
+	if err != nil {
+		http.Error(w,err.Error(),http.StatusInternalServerError)
+	}
+	middleware(w,randomlyGenUUID.String())
+}
+
 func main() {
 	http.HandleFunc("/md5", md5sum)
 	http.HandleFunc("/sha1", sha1Sum)
@@ -95,6 +103,7 @@ func main() {
 	http.HandleFunc("/uri-encode", uriEncodor)
 	http.HandleFunc("/uri-decode", uriDecodor)
 	http.HandleFunc("/uuid", generateUUID)
+	http.HandleFunc("/random-uuid", randomUUID)
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "2323"
