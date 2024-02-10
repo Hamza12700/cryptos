@@ -10,6 +10,8 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+
+	"github.com/google/uuid"
 )
 
 func middleware(w http.ResponseWriter, sendResquest string) {
@@ -68,6 +70,23 @@ func uriDecodor(w http.ResponseWriter, r *http.Request) {
 	middleware(w, decodedURI)
 }
 
+func generateUUID(w http.ResponseWriter, r *http.Request) {
+	textToConvert := r.URL.Query().Get("text")
+	hasher := md5.New()
+	_, err := hasher.Write([]byte(textToConvert))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	md5Hash := hex.EncodeToString(hasher.Sum(nil))
+	uuidBytes, err := uuid.FromBytes([]byte(md5Hash[:16]))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	middleware(w, uuidBytes.String())
+}
+
 func main() {
 	http.HandleFunc("/md5", md5sum)
 	http.HandleFunc("/sha1", sha1Sum)
@@ -75,6 +94,7 @@ func main() {
 	http.HandleFunc("/sha224", sha224Sum)
 	http.HandleFunc("/uri-encode", uriEncodor)
 	http.HandleFunc("/uri-decode", uriDecodor)
+	http.HandleFunc("/uuid", generateUUID)
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "2323"
