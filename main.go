@@ -102,6 +102,15 @@ func encodeToBase64(w http.ResponseWriter, r *http.Request) {
 	middleware(w,encodedText)
 }
 
+func decodeToBase64(w http.ResponseWriter, r *http.Request) {
+	textToDecode := r.URL.Query().Get("text")
+	decodedText, err := base64.StdEncoding.DecodeString(textToDecode)
+	if err != nil {
+		http.Error(w,err.Error(), http.StatusInternalServerError)
+	}
+	middleware(w,string(decodedText))
+}
+
 func main() {
 	http.HandleFunc("/md5", md5sum)
 	http.HandleFunc("/sha1", sha1Sum)
@@ -112,6 +121,7 @@ func main() {
 	http.HandleFunc("/uuid", generateUUID)
 	http.HandleFunc("/random-uuid", randomUUID)
 	http.HandleFunc("/base64", encodeToBase64)
+	http.HandleFunc("/decode-base64", decodeToBase64)
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "2323"
