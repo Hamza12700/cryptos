@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"crypto/sha1"
 	"crypto/sha256"
+	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
@@ -95,6 +96,12 @@ func randomUUID(w http.ResponseWriter, r *http.Request) {
 	middleware(w,randomlyGenUUID.String())
 }
 
+func encodeToBase64(w http.ResponseWriter, r *http.Request) {
+	textToConvert := r.URL.Query().Get("text")
+	encodedText := base64.StdEncoding.EncodeToString([]byte(textToConvert))
+	middleware(w,encodedText)
+}
+
 func main() {
 	http.HandleFunc("/md5", md5sum)
 	http.HandleFunc("/sha1", sha1Sum)
@@ -104,6 +111,7 @@ func main() {
 	http.HandleFunc("/uri-decode", uriDecodor)
 	http.HandleFunc("/uuid", generateUUID)
 	http.HandleFunc("/random-uuid", randomUUID)
+	http.HandleFunc("/base64", encodeToBase64)
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "2323"
