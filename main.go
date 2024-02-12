@@ -111,6 +111,15 @@ func decodeToBase64(w http.ResponseWriter, r *http.Request) {
 	middleware(w,string(decodedText))
 }
 
+func textToBinary(w http.ResponseWriter, r *http.Request) {
+	textToConvert := r.URL.Query().Get("text")
+	var binString string
+	for _,i := range textToConvert {
+		binString = fmt.Sprintf("%s%b", binString, i)
+	}
+	middleware(w,binString)
+}
+
 func main() {
 	http.HandleFunc("/md5", md5sum)
 	http.HandleFunc("/sha1", sha1Sum)
@@ -122,6 +131,7 @@ func main() {
 	http.HandleFunc("/random-uuid", randomUUID)
 	http.HandleFunc("/base64", encodeToBase64)
 	http.HandleFunc("/decode-base64", decodeToBase64)
+	http.HandleFunc("/text-to-binary", textToBinary)
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "2323"
