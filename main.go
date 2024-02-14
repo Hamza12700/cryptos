@@ -8,6 +8,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"html"
 	"net/http"
 	"net/url"
 	"os"
@@ -120,6 +121,12 @@ func textToBinary(w http.ResponseWriter, r *http.Request) {
 	middleware(w,binString)
 }
 
+func htmlEscapeCharacters(w http.ResponseWriter, r *http.Request) {
+	textToEscape := r.URL.Query().Get("text")
+	escapedHtmlEntities := html.EscapeString(textToEscape)
+	middleware(w,escapedHtmlEntities)
+}
+
 func main() {
 	http.HandleFunc("/md5", md5sum)
 	http.HandleFunc("/sha1", sha1Sum)
@@ -132,6 +139,7 @@ func main() {
 	http.HandleFunc("/base64", encodeToBase64)
 	http.HandleFunc("/decode-base64", decodeToBase64)
 	http.HandleFunc("/text-to-binary", textToBinary)
+	http.HandleFunc("/html-entities-escape", htmlEscapeCharacters)
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "2323"
