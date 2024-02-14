@@ -115,7 +115,7 @@ func textToBinary(w http.ResponseWriter, r *http.Request) {
 	textToConvert := r.URL.Query().Get("text")
 	var binString string
 	for _,i := range textToConvert {
-		binString = fmt.Sprintf("%s%b", binString, i)
+		binString = fmt.Sprintf("%s%08b", binString, i)
 	}
 	middleware(w,binString)
 }
