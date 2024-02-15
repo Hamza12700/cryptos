@@ -92,39 +92,39 @@ func generateUUID(w http.ResponseWriter, r *http.Request) {
 func randomUUID(w http.ResponseWriter, r *http.Request) {
 	randomlyGenUUID, err := uuid.NewRandom()
 	if err != nil {
-		http.Error(w,err.Error(),http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	middleware(w,randomlyGenUUID.String())
+	middleware(w, randomlyGenUUID.String())
 }
 
 func encodeToBase64(w http.ResponseWriter, r *http.Request) {
 	textToConvert := r.URL.Query().Get("text")
 	encodedText := base64.StdEncoding.EncodeToString([]byte(textToConvert))
-	middleware(w,encodedText)
+	middleware(w, encodedText)
 }
 
 func decodeToBase64(w http.ResponseWriter, r *http.Request) {
 	textToDecode := r.URL.Query().Get("text")
 	decodedText, err := base64.StdEncoding.DecodeString(textToDecode)
 	if err != nil {
-		http.Error(w,err.Error(), http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	middleware(w,string(decodedText))
+	middleware(w, string(decodedText))
 }
 
 func textToBinary(w http.ResponseWriter, r *http.Request) {
 	textToConvert := r.URL.Query().Get("text")
 	var binString string
-	for _,i := range textToConvert {
+	for _, i := range textToConvert {
 		binString = fmt.Sprintf("%s%08b", binString, i)
 	}
-	middleware(w,binString)
+	middleware(w, binString)
 }
 
 func escapeHtml(w http.ResponseWriter, r *http.Request) {
 	htmlToEscape := r.URL.Query().Get("text")
 	escapedHtmlEntities := html.EscapeString(htmlToEscape)
-	middleware(w,escapedHtmlEntities)
+	middleware(w, escapedHtmlEntities)
 }
 
 func unescapeHtml(w http.ResponseWriter, r *http.Request) {
