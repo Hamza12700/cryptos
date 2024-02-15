@@ -131,21 +131,16 @@ func escapeHtml(w http.ResponseWriter, r *http.Request) {
 func unescapeHtml(w http.ResponseWriter, r *http.Request) {
 	escapeHtml := r.URL.Query().Get("text")
 	isBase64 := r.URL.Query().Get("base64")
-	if isBase64 == "true" {
-		convertToBase64, err := base64.StdEncoding.DecodeString(escapeHtml)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
-		unscapeHtml := html.UnescapeString(string(convertToBase64))
-		unscapeHtmlBase64 := base64.StdEncoding.EncodeToString([]byte(unscapeHtml))
-		middleware(w, unscapeHtmlBase64)
-		return
-	}
 	convertToBase64, err := base64.StdEncoding.DecodeString(escapeHtml)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 	unscapeHtml := html.UnescapeString(string(convertToBase64))
+	if isBase64 == "true" {
+		unscapeHtmlBase64 := base64.StdEncoding.EncodeToString([]byte(unscapeHtml))
+		middleware(w, unscapeHtmlBase64)
+		return
+	}
 	middleware(w, unscapeHtml)
 }
 
