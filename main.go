@@ -19,6 +19,7 @@ import (
 func middleware(w http.ResponseWriter, sendResquest string) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET")
 	w.WriteHeader(http.StatusCreated)
 	jsonResq, err := json.Marshal(sendResquest)
 	if err != nil {
