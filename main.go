@@ -129,8 +129,12 @@ func escapeHtml(w http.ResponseWriter, r *http.Request) {
 
 func unescapeHtml(w http.ResponseWriter, r *http.Request) {
 	escapeHtml := r.URL.Query().Get("text")
-	unscapeHtml := html.UnescapeString(escapeHtml)
-	middleware(w,unscapeHtml)
+	convertToBase64, err := base64.StdEncoding.DecodeString(escapeHtml)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	unscapeHtml := html.UnescapeString(string(convertToBase64))
+	middleware(w, unscapeHtml)
 }
 
 func main() {
