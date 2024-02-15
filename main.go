@@ -121,10 +121,16 @@ func textToBinary(w http.ResponseWriter, r *http.Request) {
 	middleware(w,binString)
 }
 
-func htmlEscapeCharacters(w http.ResponseWriter, r *http.Request) {
-	textToEscape := r.URL.Query().Get("text")
-	escapedHtmlEntities := html.EscapeString(textToEscape)
+func escapeHtml(w http.ResponseWriter, r *http.Request) {
+	htmlToEscape := r.URL.Query().Get("text")
+	escapedHtmlEntities := html.EscapeString(htmlToEscape)
 	middleware(w,escapedHtmlEntities)
+}
+
+func unescapeHtml(w http.ResponseWriter, r *http.Request) {
+	escapeHtml := r.URL.Query().Get("text")
+	unscapeHtml := html.UnescapeString(escapeHtml)
+	middleware(w,unscapeHtml)
 }
 
 func main() {
@@ -139,7 +145,8 @@ func main() {
 	http.HandleFunc("/base64", encodeToBase64)
 	http.HandleFunc("/decode-base64", decodeToBase64)
 	http.HandleFunc("/text-to-binary", textToBinary)
-	http.HandleFunc("/html-entities-escape", htmlEscapeCharacters)
+	http.HandleFunc("/html-entities-escape", escapeHtml)
+	http.HandleFunc("/unescape-html-entities", unescapeHtml)
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "2323"
