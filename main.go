@@ -158,6 +158,7 @@ func main() {
 	http.HandleFunc("/text-to-binary", textToBinary)
 	http.HandleFunc("/html-entities-escape", escapeHtml)
 	http.HandleFunc("/unescape-html-entities", unescapeHtml)
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "2323"
