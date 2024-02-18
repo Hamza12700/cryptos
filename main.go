@@ -9,12 +9,53 @@ import (
 	"encoding/json"
 	"fmt"
 	"html"
+	"html/template"
 	"net/http"
 	"net/url"
 	"os"
+	"path"
 
 	"github.com/google/uuid"
 )
+
+func main() {
+	http.HandleFunc("/md5", md5sum)
+	http.HandleFunc("/sha1", sha1Sum)
+	http.HandleFunc("/sha256", sha256Sum)
+	http.HandleFunc("/sha224", sha224Sum)
+	http.HandleFunc("/uri-encode", uriEncodor)
+	http.HandleFunc("/uri-decode", uriDecodor)
+	http.HandleFunc("/uuid", generateUUID)
+	http.HandleFunc("/random-uuid", randomUUID)
+	http.HandleFunc("/base64", encodeToBase64)
+	http.HandleFunc("/decode-base64", decodeToBase64)
+	http.HandleFunc("/text-to-binary", textToBinary)
+	http.HandleFunc("/html-entities-escape", escapeHtml)
+	http.HandleFunc("/unescape-html-entities", unescapeHtml)
+
+	http.HandleFunc("/", homePage)
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "2323"
+	}
+
+	fmt.Println("Listening on", port)
+	http.ListenAndServe(":"+port, nil)
+}
+
+func homePage(w http.ResponseWriter, r *http.Request) {
+	filePath := path.Join("html-templates", "index.html")
+	templ, err := template.ParseFiles(filePath)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if err := templ.Execute(w, nil); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
 
 func middleware(w http.ResponseWriter, sendResquest string) {
 	w.Header().Set("Content-Type", "application/json")
@@ -142,27 +183,4 @@ func unescapeHtml(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	middleware(w, unscapeHtml)
-}
-
-func main() {
-	http.HandleFunc("/md5", md5sum)
-	http.HandleFunc("/sha1", sha1Sum)
-	http.HandleFunc("/sha256", sha256Sum)
-	http.HandleFunc("/sha224", sha224Sum)
-	http.HandleFunc("/uri-encode", uriEncodor)
-	http.HandleFunc("/uri-decode", uriDecodor)
-	http.HandleFunc("/uuid", generateUUID)
-	http.HandleFunc("/random-uuid", randomUUID)
-	http.HandleFunc("/base64", encodeToBase64)
-	http.HandleFunc("/decode-base64", decodeToBase64)
-	http.HandleFunc("/text-to-binary", textToBinary)
-	http.HandleFunc("/html-entities-escape", escapeHtml)
-	http.HandleFunc("/unescape-html-entities", unescapeHtml)
-
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "2323"
-	}
-	fmt.Println("Listening on", port)
-	http.ListenAndServe(":"+port, nil)
 }
