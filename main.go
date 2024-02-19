@@ -9,11 +9,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"html"
-	"html/template"
 	"net/http"
 	"net/url"
 	"os"
-	"path"
 
 	"github.com/google/uuid"
 )
@@ -33,7 +31,8 @@ func main() {
 	http.HandleFunc("/html-entities-escape", escapeHtml)
 	http.HandleFunc("/unescape-html-entities", unescapeHtml)
 
-	http.HandleFunc("/", homePage)
+	rootDir := http.FileServer(http.Dir("./html-templates"))
+	http.Handle("/", rootDir)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -42,19 +41,6 @@ func main() {
 
 	fmt.Println("Listening on", port)
 	http.ListenAndServe(":"+port, nil)
-}
-
-func homePage(w http.ResponseWriter, r *http.Request) {
-	filePath := path.Join("html-templates", "index.html")
-	templ, err := template.ParseFiles(filePath)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	if err := templ.Execute(w, nil); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
 }
 
 func middleware(w http.ResponseWriter, sendResquest string) {
