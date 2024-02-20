@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" href="/static/favicon.png">
+  <link rel="stylesheet" href="/static/output.css">
   <meta name="viewport" content="width=device-width" />
   <meta name="author" content="Hamza Rashid" />
   <script src="https://unpkg.com/htmx.org@1.9.10"
@@ -12,8 +13,26 @@
   <title>Cryptos</title>
 </head>
 
-<body>
-  <h1>testing</h1>
+<body class="bg-[#cacaca] font-mono w-[75rem] mx-auto">
+  <nav class="my-3 flex items-center justify-between">
+    <a class="text-3xl font-bold hover:underline" href="/">Cryptos</a>
+    <a class="font-semibold text-2xl hover:underline" href="https://github.com/Hamza12700/cryptos/">Github</a>
+  </nav>
+
+  <hgroup class="mt-10">
+    <h2 class="text-7xl">Cryptos</h2>
+    <p class="text-2xl mt-4">A Golang REST API that provides cryptographic hashing services.</p>
+  </hgroup>
+
+  <h3 class="text-5xl mt-12">Try it</h3>
+  <p class="text-xl my-2">Run this code here, in a console or from any site:</p>
+  <div class="bg-stone-800 text-xl rounded-md text-white whitespace-pre">
+    fetch("https://cryptos.up.railway.app/sha1?text=hello")
+      .then(res => res.json())
+      .then(json => console.log(json))
+  </div>
+  <button hx-get="/sha1?text=hello" hx-target="#response" class="px-3 py-2 my-4 text-xl text-white font-bold bg-green-600 rounded-md" type="button">Run script</button>
+  <code id="response" class="block bg-stone-800 p-3 text-xl rounded-md text-white">{}</code>
 </body>
 
 </html>
