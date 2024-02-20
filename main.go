@@ -16,6 +16,33 @@ import (
 	"github.com/google/uuid"
 )
 
+func main() {
+	http.HandleFunc("/md5", md5sum)
+	http.HandleFunc("/sha1", sha1Sum)
+	http.HandleFunc("/sha256", sha256Sum)
+	http.HandleFunc("/sha224", sha224Sum)
+	http.HandleFunc("/uri-encode", uriEncodor)
+	http.HandleFunc("/uri-decode", uriDecodor)
+	http.HandleFunc("/uuid", generateUUID)
+	http.HandleFunc("/random-uuid", randomUUID)
+	http.HandleFunc("/base64", encodeToBase64)
+	http.HandleFunc("/decode-base64", decodeToBase64)
+	http.HandleFunc("/text-to-binary", textToBinary)
+	http.HandleFunc("/html-entities-escape", escapeHtml)
+	http.HandleFunc("/unescape-html-entities", unescapeHtml)
+
+	rootDir := http.FileServer(http.Dir("./html-templates"))
+	http.Handle("/", rootDir)
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "2323"
+	}
+
+	fmt.Println("Listening on", port)
+	http.ListenAndServe(":"+port, nil)
+}
+
 func middleware(w http.ResponseWriter, sendResquest string) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -28,6 +55,7 @@ func middleware(w http.ResponseWriter, sendResquest string) {
 	}
 	w.Write(jsonResq)
 }
+
 func hexToString(w http.ResponseWriter, hashedText []byte) {
 	hash := hex.EncodeToString(hashedText[:])
 	middleware(w, hash)
@@ -142,27 +170,4 @@ func unescapeHtml(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	middleware(w, unscapeHtml)
-}
-
-func main() {
-	http.HandleFunc("/md5", md5sum)
-	http.HandleFunc("/sha1", sha1Sum)
-	http.HandleFunc("/sha256", sha256Sum)
-	http.HandleFunc("/sha224", sha224Sum)
-	http.HandleFunc("/uri-encode", uriEncodor)
-	http.HandleFunc("/uri-decode", uriDecodor)
-	http.HandleFunc("/uuid", generateUUID)
-	http.HandleFunc("/random-uuid", randomUUID)
-	http.HandleFunc("/base64", encodeToBase64)
-	http.HandleFunc("/decode-base64", decodeToBase64)
-	http.HandleFunc("/text-to-binary", textToBinary)
-	http.HandleFunc("/html-entities-escape", escapeHtml)
-	http.HandleFunc("/unescape-html-entities", unescapeHtml)
-
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "2323"
-	}
-	fmt.Println("Listening on", port)
-	http.ListenAndServe(":"+port, nil)
 }
