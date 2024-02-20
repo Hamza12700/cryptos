@@ -3,12 +3,15 @@
 ## Overview
 This API provides a set of hash functions implemented in Golang. It allows clients to perform hashing operations on text inputs, returning the hashed result.
 
-## Usage
-To use the API, you need to make a `Get` request to the `/hashType` endpoint with a URL parameter named `text`. The text to be hashed should be URL encoded. Here's an example using curl:
+## Example Usage
+To use the api, simply make a `Get` request to the endpoint, providing the `text` parameter with the value you wish to encrypt/decrypt.
 
+Here's an example:
 ```bash
-curl "https://cryptos.up.railway.app/sha1?text=example%20text"
+curl "https://cryptos.up.railway.app/sha1?text=hello"
 ```
+> [!NOTE]
+> There is a common pattern, endpoints like `sha1` and `sha256` can take a url parameter and if it can then the parameter name is `text`
 
 The API will respond with a JSON string containing the resuled hash.
 ```json
