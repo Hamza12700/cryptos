@@ -31,7 +31,8 @@
       .then(res => res.json())
       .then(json => console.log(json))
   </div>
-  <button hx-get="/sha1?text=hello" hx-target="#response" class="px-3 py-2 my-4 text-xl text-white font-bold bg-green-600 rounded-md" type="button">Run script</button>
+  <button hx-get="/sha1?text=hello" hx-target="#response"
+    class="px-3 py-2 my-4 text-xl text-white font-bold bg-green-600 rounded-md" type="button">Run script</button>
   <code id="response" class="block bg-stone-800 p-3 text-xl rounded-md text-white">{}</code>
 </body>
 

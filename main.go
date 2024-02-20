@@ -55,6 +55,7 @@ func middleware(w http.ResponseWriter, sendResquest string) {
 	}
 	w.Write(jsonResq)
 }
+
 func hexToString(w http.ResponseWriter, hashedText []byte) {
 	hash := hex.EncodeToString(hashedText[:])
 	middleware(w, hash)
