@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"html"
+	"html/template"
 	"net/http"
 	"net/url"
 	"os"
@@ -46,8 +47,21 @@ func main() {
 	}
 	router(apiRoutes)
 
-	rootDir := http.FileServer(http.Dir("./html-templates"))
-	http.Handle("/", rootDir)
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./html-templates/static"))))
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		tmpl, err := template.ParseFiles("./html-templates/index.html")
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		err = tmpl.Execute(w, nil)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	})
 
 	port := os.Getenv("PORT")
 	if port == "" {
