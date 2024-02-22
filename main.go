@@ -30,19 +30,19 @@ func router(routes []route) {
 func main() {
 
 	apiRoutes := []route{
-		{ name: "/md5", handler: md5Sum },
-		{ name: "/sha1", handler: sha1Sum },
-		{ name: "/sha256", handler: sha256Sum },
-		{ name: "/sha224", handler: sha224Sum },
-		{ name: "/uri-encode", handler: uriEncodor },
-		{ name: "/uri-decode", handler: uriDecodor },
-		{ name: "/uuid", handler: generateUUID },
-		{ name: "/random-uuid", handler: randomUUID },
-		{ name: "/base64", handler: encodeToBase64 },
-		{ name: "/decode-base64", handler: decodeToBase64 },
-		{ name: "/text-to-binary", handler: textToBinary },
-		{ name: "/html-entities-escape", handler: escapeHtml },
-		{ name: "/unescape-html-entities", handler: unescapeHtml },
+		{name: "/md5", handler: md5Sum},
+		{name: "/sha1", handler: sha1Sum},
+		{name: "/sha256", handler: sha256Sum},
+		{name: "/sha224", handler: sha224Sum},
+		{name: "/uri-encode", handler: uriEncodor},
+		{name: "/uri-decode", handler: uriDecodor},
+		{name: "/uuid", handler: generateUUID},
+		{name: "/random-uuid", handler: randomUUID},
+		{name: "/base64", handler: encodeToBase64},
+		{name: "/decode-base64", handler: decodeToBase64},
+		{name: "/text-to-binary", handler: textToBinary},
+		{name: "/html-entities-escape", handler: escapeHtml},
+		{name: "/unescape-html-entities", handler: unescapeHtml},
 	}
 	router(apiRoutes)
 
