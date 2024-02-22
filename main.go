@@ -16,20 +16,36 @@ import (
 	"github.com/google/uuid"
 )
 
+type route struct {
+	name    string
+	handler http.HandlerFunc
+}
+
+func router(routes []route) {
+	for i := 0; i < len(routes); i++ {
+		fmt.Println(routes[i].name)
+		http.HandleFunc(routes[i].name, routes[i].handler)
+	}
+}
+
 func main() {
-	http.HandleFunc("/md5", md5sum)
-	http.HandleFunc("/sha1", sha1Sum)
-	http.HandleFunc("/sha256", sha256Sum)
-	http.HandleFunc("/sha224", sha224Sum)
-	http.HandleFunc("/uri-encode", uriEncodor)
-	http.HandleFunc("/uri-decode", uriDecodor)
-	http.HandleFunc("/uuid", generateUUID)
-	http.HandleFunc("/random-uuid", randomUUID)
-	http.HandleFunc("/base64", encodeToBase64)
-	http.HandleFunc("/decode-base64", decodeToBase64)
-	http.HandleFunc("/text-to-binary", textToBinary)
-	http.HandleFunc("/html-entities-escape", escapeHtml)
-	http.HandleFunc("/unescape-html-entities", unescapeHtml)
+
+	apiRoutes := []route{
+		{ name: "/md5", handler: md5Sum },
+		{ name: "/sha1", handler: sha1Sum },
+		{ name: "/sha256", handler: sha256Sum },
+		{ name: "/sha224", handler: sha224Sum },
+		{ name: "/uri-encode", handler: uriEncodor },
+		{ name: "/uri-decode", handler: uriDecodor },
+		{ name: "/uuid", handler: generateUUID },
+		{ name: "/random-uuid", handler: randomUUID },
+		{ name: "/base64", handler: encodeToBase64 },
+		{ name: "/decode-base64", handler: decodeToBase64 },
+		{ name: "/text-to-binary", handler: textToBinary },
+		{ name: "/html-entities-escape", handler: escapeHtml },
+		{ name: "/unescape-html-entities", handler: unescapeHtml },
+	}
+	router(apiRoutes)
 
 	rootDir := http.FileServer(http.Dir("./html-templates"))
 	http.Handle("/", rootDir)
