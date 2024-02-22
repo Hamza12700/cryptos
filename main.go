@@ -79,7 +79,7 @@ func sha224Sum(w http.ResponseWriter, r *http.Request) {
 	hexToString(w, hashedText[:])
 }
 
-func md5sum(w http.ResponseWriter, r *http.Request) {
+func md5Sum(w http.ResponseWriter, r *http.Request) {
 	textToHash := r.URL.Query().Get("text")
 	hashedText := md5.Sum([]byte(textToHash))
 	hexToString(w, hashedText[:])
