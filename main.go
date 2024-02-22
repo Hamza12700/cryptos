@@ -23,7 +23,6 @@ type route struct {
 
 func router(routes []route) {
 	for i := 0; i < len(routes); i++ {
-		fmt.Println(routes[i].name)
 		http.HandleFunc(routes[i].name, routes[i].handler)
 	}
 }
