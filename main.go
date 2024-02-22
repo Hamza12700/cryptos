@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"html"
 	"html/template"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -20,6 +21,10 @@ import (
 type route struct {
 	name    string
 	handler http.HandlerFunc
+}
+
+type tmplData struct {
+	RouteLen int
 }
 
 func router(routes []route) {
@@ -53,12 +58,16 @@ func main() {
 		tmpl, err := template.ParseFiles("./html-templates/index.html")
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			log.Println(err)
 			return
 		}
 
-		err = tmpl.Execute(w, nil)
+		data := tmplData{RouteLen: len(apiRoutes)}
+
+		err = tmpl.Execute(w, data)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			log.Println(err)
 			return
 		}
 	})
