@@ -34,10 +34,15 @@
   </div>
   <button hx-get="/sha1?text=hello" hx-target="#response"
     class="px-3 py-2 my-4 text-lg text-white font-bold bg-green-600 rounded-md" type="button">Run script</button>
-  <code id="response" class="block bg-stone-800 p-3 text-xl rounded-md text-white">{}</code>
+  <code id="response" class="block bg-stone-800 p-3 text-sm rounded-md text-white">{}</code>
 
   <h3 class="text-4xl font-medium mt-10 mb-2">Resources</h3>
-  <p class="text-lg"><span class="font-semibold">Cryptos</span> comes with {{.RouteLen}} resources:</p>
+  <p class="text-lg mb-2"><span class="font-semibold">Cryptos</span> comes with {{.RouteLen}} resources:</p>
+  <div class="flex gap-2 flex-col">
+    {{range .Routes}}
+    <a class="underline" href="{{.Name}}">{{.Name}}</a>
+    {{end}}
+  </div>
 </body>
 
 </html>
