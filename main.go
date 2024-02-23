@@ -19,36 +19,37 @@ import (
 )
 
 type route struct {
-	name    string
+	Name    string
 	handler http.HandlerFunc
 }
 
 type tmplData struct {
 	RouteLen int
+	Routes   []route
 }
 
 func router(routes []route) {
 	for i := 0; i < len(routes); i++ {
-		http.HandleFunc(routes[i].name, routes[i].handler)
+		http.HandleFunc(routes[i].Name, routes[i].handler)
 	}
 }
 
 func main() {
 
 	apiRoutes := []route{
-		{name: "/md5", handler: md5Sum},
-		{name: "/sha1", handler: sha1Sum},
-		{name: "/sha256", handler: sha256Sum},
-		{name: "/sha224", handler: sha224Sum},
-		{name: "/uri-encode", handler: uriEncodor},
-		{name: "/uri-decode", handler: uriDecodor},
-		{name: "/uuid", handler: generateUUID},
-		{name: "/random-uuid", handler: randomUUID},
-		{name: "/base64", handler: encodeToBase64},
-		{name: "/decode-base64", handler: decodeToBase64},
-		{name: "/text-to-binary", handler: textToBinary},
-		{name: "/html-entities-escape", handler: escapeHtml},
-		{name: "/unescape-html-entities", handler: unescapeHtml},
+		{Name: "/md5", handler: md5Sum},
+		{Name: "/sha1", handler: sha1Sum},
+		{Name: "/sha256", handler: sha256Sum},
+		{Name: "/sha224", handler: sha224Sum},
+		{Name: "/uri-encode", handler: uriEncodor},
+		{Name: "/uri-decode", handler: uriDecodor},
+		{Name: "/uuid", handler: generateUUID},
+		{Name: "/random-uuid", handler: randomUUID},
+		{Name: "/base64", handler: encodeToBase64},
+		{Name: "/decode-base64", handler: decodeToBase64},
+		{Name: "/text-to-binary", handler: textToBinary},
+		{Name: "/html-entities-escape", handler: escapeHtml},
+		{Name: "/unescape-html-entities", handler: unescapeHtml},
 	}
 	router(apiRoutes)
 
@@ -62,7 +63,10 @@ func main() {
 			return
 		}
 
-		data := tmplData{RouteLen: len(apiRoutes)}
+		data := tmplData{
+			RouteLen: len(apiRoutes),
+			Routes:   apiRoutes,
+		}
 
 		err = tmpl.Execute(w, data)
 		if err != nil {
