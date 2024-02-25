@@ -10,8 +10,6 @@ Here's an example:
 ```bash
 curl "https://cryptos.up.railway.app/sha1?text=hello"
 ```
-> [!NOTE]
-> There is a common pattern, endpoints like `sha1` and `sha256` can take a url parameter and if it can then the parameter name is `text`
 
 The API will respond with a JSON string containing the resuled hash.
 ```json
