@@ -68,7 +68,7 @@ func main() {
 			Routes:   apiRoutes,
 		}
 
-		err = tmpl.Execute(w, data)
+		err = tmpl.Execute(w, &data)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			log.Println(err)
@@ -85,7 +85,7 @@ func main() {
 	http.ListenAndServe(":"+port, nil)
 }
 
-func middleware(w http.ResponseWriter, sendResquest string) {
+func middleware(w http.ResponseWriter, sendResquest *string) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "GET")
@@ -100,7 +100,7 @@ func middleware(w http.ResponseWriter, sendResquest string) {
 
 func hexToString(w http.ResponseWriter, hashedText []byte) {
 	hash := hex.EncodeToString(hashedText[:])
-	middleware(w, hash)
+	middleware(w, &hash)
 }
 
 func sha1Sum(w http.ResponseWriter, r *http.Request) {
@@ -130,7 +130,7 @@ func md5Sum(w http.ResponseWriter, r *http.Request) {
 func uriEncodor(w http.ResponseWriter, r *http.Request) {
 	textToEncode := r.URL.Query().Get("text")
 	encodedURI := url.PathEscape(textToEncode)
-	middleware(w, encodedURI)
+	middleware(w, &encodedURI)
 }
 
 func uriDecodor(w http.ResponseWriter, r *http.Request) {
@@ -140,7 +140,7 @@ func uriDecodor(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	middleware(w, decodedURI)
+	middleware(w, &decodedURI)
 }
 
 func generateUUID(w http.ResponseWriter, r *http.Request) {
@@ -156,8 +156,9 @@ func generateUUID(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+	uuidStr := uuidBytes.String()
 
-	middleware(w, uuidBytes.String())
+	middleware(w, &uuidStr)
 }
 
 func randomUUID(w http.ResponseWriter, r *http.Request) {
@@ -165,13 +166,14 @@ func randomUUID(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	middleware(w, randomlyGenUUID.String())
+	randomUuidStr := randomlyGenUUID.String()
+	middleware(w, &randomUuidStr)
 }
 
 func encodeToBase64(w http.ResponseWriter, r *http.Request) {
 	textToConvert := r.URL.Query().Get("text")
 	encodedText := base64.StdEncoding.EncodeToString([]byte(textToConvert))
-	middleware(w, encodedText)
+	middleware(w, &encodedText)
 }
 
 func decodeToBase64(w http.ResponseWriter, r *http.Request) {
@@ -180,7 +182,8 @@ func decodeToBase64(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	middleware(w, string(decodedText))
+	decodedTextStr := string(decodedText)
+	middleware(w, &decodedTextStr)
 }
 
 func textToBinary(w http.ResponseWriter, r *http.Request) {
@@ -189,13 +192,13 @@ func textToBinary(w http.ResponseWriter, r *http.Request) {
 	for _, i := range textToConvert {
 		binString = fmt.Sprintf("%s%08b", binString, i)
 	}
-	middleware(w, binString)
+	middleware(w, &binString)
 }
 
 func escapeHtml(w http.ResponseWriter, r *http.Request) {
 	htmlToEscape := r.URL.Query().Get("text")
 	escapedHtmlEntities := html.EscapeString(htmlToEscape)
-	middleware(w, escapedHtmlEntities)
+	middleware(w, &escapedHtmlEntities)
 }
 
 func unescapeHtml(w http.ResponseWriter, r *http.Request) {
@@ -208,8 +211,8 @@ func unescapeHtml(w http.ResponseWriter, r *http.Request) {
 	unscapeHtml := html.UnescapeString(string(convertToBase64))
 	if isBase64 == "true" {
 		unscapeHtmlBase64 := base64.StdEncoding.EncodeToString([]byte(unscapeHtml))
-		middleware(w, unscapeHtmlBase64)
+		middleware(w, &unscapeHtmlBase64)
 		return
 	}
-	middleware(w, unscapeHtml)
+	middleware(w, &unscapeHtml)
 }
