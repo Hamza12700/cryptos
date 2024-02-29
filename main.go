@@ -29,8 +29,8 @@ type tmplData struct {
 }
 
 func router(routes []route) {
-	for i := 0; i < len(routes); i++ {
-		http.HandleFunc(routes[i].Name, routes[i].handler)
+	for _, v := range routes {
+		http.HandleFunc(v.Name, v.handler)
 	}
 }
 
