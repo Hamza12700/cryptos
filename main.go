@@ -17,7 +17,7 @@ type route struct {
 
 type tmplData struct {
 	RouteLen int
-	Routes   []route
+	Routes   *[]route
 }
 
 func router(routes *[]route) {
@@ -57,7 +57,7 @@ func main() {
 
 		data := tmplData{
 			RouteLen: len(apiRoutes),
-			Routes:   apiRoutes,
+			Routes:   &apiRoutes,
 		}
 
 		err = tmpl.Execute(w, &data)
