@@ -29,8 +29,8 @@
   <p class="text-lg my-2">Run this code here, in a console or from any site:</p>
   <div class="bg-stone-800 font-mono text-sm rounded-md text-white whitespace-pre">
     fetch("https://cryptos.up.railway.app/sha1?text=hello")
-      .then(res => res.json())
-      .then(json => console.log(json))
+    .then(res => res.json())
+    .then(json => console.log(json))
   </div>
   <button hx-get="/sha1?text=hello" hx-target="#response"
     class="px-3 py-2 my-4 text-lg text-white font-bold bg-green-600 rounded-md" type="button">Run script</button>
