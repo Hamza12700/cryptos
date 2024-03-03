@@ -20,12 +20,6 @@ type tmplData struct {
 	Routes   *[]route
 }
 
-func router(routes *[]route) {
-	for _, v := range *routes {
-		http.HandleFunc(v.Name, v.handler)
-	}
-}
-
 func main() {
 
 	apiRoutes := []route{
@@ -43,7 +37,9 @@ func main() {
 		{Name: "/html-entities-escape", handler: EscapeHtml},
 		{Name: "/unescape-html-entities", handler: UnescapeHtml},
 	}
-	router(&apiRoutes)
+	for _, v := range apiRoutes {
+		http.HandleFunc(v.Name, v.handler)
+	}
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./html-templates/static"))))
 
