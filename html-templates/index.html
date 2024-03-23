@@ -28,21 +28,13 @@
   <h3 class="text-4xl font-medium mt-12">Try it</h3>
   <p class="text-lg my-2">Run this code here, in a console or from any site:</p>
   <div class="bg-stone-800 font-mono text-sm rounded-md text-white whitespace-pre">
-    fetch("https://cryptos.up.railway.app/sha1?text=hello")
+    fetch("https://cryptos.up.railway.app/sha1/hello")
     .then(res => res.json())
     .then(json => console.log(json))
   </div>
-  <button hx-get="/sha1?text=hello" hx-target="#response"
+  <button hx-get="/sha1/hello" hx-target="#response"
     class="px-3 py-2 my-4 text-lg text-white font-bold bg-green-600 rounded-md" type="button">Run script</button>
   <code id="response" class="block bg-stone-800 p-3 text-sm rounded-md text-white">{}</code>
-
-  <h3 class="text-4xl font-medium mt-10 mb-2">Resources</h3>
-  <p class="text-lg mb-2"><span class="font-semibold">Cryptos</span> comes with {{.RouteLen}} resources:</p>
-  <div class="flex gap-2 flex-col">
-    {{range .Routes}}
-    <a class="underline" href="{{.Name}}">{{.Name}}</a>
-    {{end}}
-  </div>
 </body>
 
 </html>
