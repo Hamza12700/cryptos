@@ -8,7 +8,7 @@ To use the api, simply make a `Get` request to the endpoint, providing the `text
 
 Here's an example:
 ```bash
-curl "https://cryptos.up.railway.app/sha1?text=hello"
+curl "https://cryptos.up.railway.app/sha1/hello"
 ```
 
 The API will respond with a JSON string containing the resuled hash.
