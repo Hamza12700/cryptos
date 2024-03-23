@@ -16,7 +16,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func middleware(w http.ResponseWriter, sendResquest *string) {
+func middleware(w http.ResponseWriter, sendResquest string) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "GET")
@@ -29,53 +29,57 @@ func middleware(w http.ResponseWriter, sendResquest *string) {
 	w.Write(jsonResq)
 }
 
-func hexToString(w http.ResponseWriter, hashedText []byte) {
+func hexToString(hashedText []byte) string {
 	hash := hex.EncodeToString(hashedText[:])
-	middleware(w, &hash)
+	return hash
 }
 
 func Sha1Sum(w http.ResponseWriter, r *http.Request) {
-	textToHash := r.URL.Query().Get("text")
+	textToHash := r.PathValue("text")
 	hashedText := sha1.Sum([]byte(textToHash))
-	hexToString(w, hashedText[:])
+	hash := hexToString(hashedText[:])
+	middleware(w, hash)
 }
 
 func Sha256Sum(w http.ResponseWriter, r *http.Request) {
-	textToHash := r.URL.Query().Get("text")
+	textToHash := r.PathValue("text")
 	hashedText := sha256.Sum256([]byte(textToHash))
-	hexToString(w, hashedText[:])
+	hash := hexToString(hashedText[:])
+	middleware(w, hash)
 }
 
 func Sha224Sum(w http.ResponseWriter, r *http.Request) {
-	textToHash := r.URL.Query().Get("text")
+	textToHash := r.PathValue("text")
 	hashedText := sha256.Sum224([]byte(textToHash))
-	hexToString(w, hashedText[:])
+	hash := hexToString(hashedText[:])
+	middleware(w, hash)
 }
 
 func Md5Sum(w http.ResponseWriter, r *http.Request) {
-	textToHash := r.URL.Query().Get("text")
+	textToHash := r.PathValue("text")
 	hashedText := md5.Sum([]byte(textToHash))
-	hexToString(w, hashedText[:])
+	hash := hexToString(hashedText[:])
+	middleware(w, hash)
 }
 
 func UriEncodor(w http.ResponseWriter, r *http.Request) {
-	textToEncode := r.URL.Query().Get("text")
+	textToEncode := r.PathValue("text")
 	encodedURI := url.PathEscape(textToEncode)
-	middleware(w, &encodedURI)
+	middleware(w, encodedURI)
 }
 
 func UriDecodor(w http.ResponseWriter, r *http.Request) {
-	textToDecode := r.URL.Query().Get("text")
+	textToDecode := r.PathValue("text")
 	decodedURI, err := url.PathUnescape(textToDecode)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	middleware(w, &decodedURI)
+	middleware(w, decodedURI)
 }
 
 func GenerateUUID(w http.ResponseWriter, r *http.Request) {
-	textToConvert := r.URL.Query().Get("text")
+	textToConvert := r.PathValue("text")
 	hasher := md5.New()
 	_, err := hasher.Write([]byte(textToConvert))
 	if err != nil {
@@ -89,7 +93,7 @@ func GenerateUUID(w http.ResponseWriter, r *http.Request) {
 	}
 	uuidStr := uuidBytes.String()
 
-	middleware(w, &uuidStr)
+	middleware(w, uuidStr)
 }
 
 func RandomUUID(w http.ResponseWriter, r *http.Request) {
@@ -98,13 +102,13 @@ func RandomUUID(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 	randomUuidStr := randomlyGenUUID.String()
-	middleware(w, &randomUuidStr)
+	middleware(w, randomUuidStr)
 }
 
 func EncodeToBase64(w http.ResponseWriter, r *http.Request) {
-	textToConvert := r.URL.Query().Get("text")
+	textToConvert := r.PathValue("text")
 	encodedText := base64.StdEncoding.EncodeToString([]byte(textToConvert))
-	middleware(w, &encodedText)
+	middleware(w, encodedText)
 }
 
 func DecodeToBase64(w http.ResponseWriter, r *http.Request) {
@@ -114,7 +118,7 @@ func DecodeToBase64(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 	decodedTextStr := string(decodedText)
-	middleware(w, &decodedTextStr)
+	middleware(w, decodedTextStr)
 }
 
 func TextToBinary(w http.ResponseWriter, r *http.Request) {
@@ -123,17 +127,17 @@ func TextToBinary(w http.ResponseWriter, r *http.Request) {
 	for _, i := range textToConvert {
 		binString = fmt.Sprintf("%s%08b", binString, i)
 	}
-	middleware(w, &binString)
+	middleware(w, binString)
 }
 
 func EscapeHtml(w http.ResponseWriter, r *http.Request) {
-	htmlToEscape := r.URL.Query().Get("text")
+	htmlToEscape := r.PathValue("text")
 	escapedHtmlEntities := html.EscapeString(htmlToEscape)
-	middleware(w, &escapedHtmlEntities)
+	middleware(w, escapedHtmlEntities)
 }
 
 func UnescapeHtml(w http.ResponseWriter, r *http.Request) {
-	escapeHtml := r.URL.Query().Get("text")
+	escapeHtml := r.PathValue("text")
 	isBase64 := r.URL.Query().Get("base64")
 	convertToBase64, err := base64.StdEncoding.DecodeString(escapeHtml)
 	if err != nil {
@@ -142,8 +146,8 @@ func UnescapeHtml(w http.ResponseWriter, r *http.Request) {
 	unscapeHtml := html.UnescapeString(string(convertToBase64))
 	if isBase64 == "true" {
 		unscapeHtmlBase64 := base64.StdEncoding.EncodeToString([]byte(unscapeHtml))
-		middleware(w, &unscapeHtmlBase64)
+		middleware(w, unscapeHtmlBase64)
 		return
 	}
-	middleware(w, &unscapeHtml)
+	middleware(w, unscapeHtml)
 }
