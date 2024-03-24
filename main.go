@@ -36,7 +36,7 @@ func main() {
 		{Name: "/base64/encode/{text}", handler: EncodeToBase64},
 		{Name: "/base64/decode/{text}", handler: DecodeToBase64},
 		{Name: "/text-to-binary/{text}", handler: TextToBinary},
-		{Name: "/html-entities/escape/{text}", handler: EscapeHtml},
+		{Name: "/html-entities/escapa", handler: EscapeHtml},
 		{Name: "/html-entities/unescape/{text}", handler: UnescapeHtml},
 	}
 	for _, v := range apiRoutes {

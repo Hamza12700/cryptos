@@ -131,7 +131,7 @@ func TextToBinary(w http.ResponseWriter, r *http.Request) {
 }
 
 func EscapeHtml(w http.ResponseWriter, r *http.Request) {
-	htmlToEscape := r.PathValue("text")
+	htmlToEscape := r.URL.Query().Get("text")
 	escapedHtmlEntities := html.EscapeString(htmlToEscape)
 	middleware(w, escapedHtmlEntities)
 }
