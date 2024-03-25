@@ -4,7 +4,7 @@
 This API provides a set of hash functions implemented in Golang. It allows clients to perform hashing operations on text inputs, returning the hashed result.
 
 ## Example Usage
-To use the api, simply make a `Get` request to the endpoint, providing the `text` parameter with the value you wish to encrypt/decrypt.
+To use the api, simply make a `Get` request to the endpoint, with the value you wish to encrypt/decrypt.
 
 Here's an example:
 ```bash
